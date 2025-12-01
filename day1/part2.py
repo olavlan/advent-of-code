@@ -25,10 +25,10 @@ def get_total_rotation(position_after_first_rotation: int, second_rotation: int)
 
 
 position = 50
-n_passing_zero = 0
+n_at_zero = 0
 for rotation in parse_rotations_file("input.txt"):
     total_rotation = get_total_rotation(position, rotation)
-    n_passing_zero += total_rotation // DIAL_SIZE
+    n_at_zero += total_rotation // DIAL_SIZE
     position = (position + rotation) % DIAL_SIZE
 
-print(n_passing_zero)
+print(n_at_zero)
