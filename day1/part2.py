@@ -1,5 +1,4 @@
 from typing import Iterator
-from math import floor
 
 DIAL_SIZE = 100
 
@@ -29,7 +28,7 @@ position = 50
 n_passing_zero = 0
 for rotation in parse_rotations_file("input.txt"):
     total_rotation = get_total_rotation(position, rotation)
-    n_passing_zero += floor(total_rotation / DIAL_SIZE)
+    n_passing_zero += total_rotation // DIAL_SIZE
     position = (position + rotation) % DIAL_SIZE
 
 print(n_passing_zero)
