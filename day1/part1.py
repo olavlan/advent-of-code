@@ -14,10 +14,10 @@ def parse_rotations_file(file_path: str) -> Iterator[int]:
 
 
 position = 50
-n_at_zero = 0
+times_at_zero = 0
 for rotation in parse_rotations_file("input.txt"):
     position = (position + rotation) % DIAL_SIZE
     if position == 0:
-        n_at_zero += 1
+        times_at_zero += 1
 
-print(n_at_zero)
+print(times_at_zero)
