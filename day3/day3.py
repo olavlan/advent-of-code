@@ -46,7 +46,7 @@ def get_largest_joltage(battery_bank: str) -> int:
             return int(str(i) * 2)
         return int(str(i) + second_digit)
 
-    return 11  # only arrive here if battery bank string is invalid!
+    raise ValueError("Not a valid battery")
 
 
 def solve_part1(file_path: str) -> int:
@@ -60,4 +60,32 @@ def solve_part1(file_path: str) -> int:
     return sum
 
 
-print(solve_part1("input.txt"))
+# print(solve_part1("input.txt"))
+
+
+def get_largest_subsequence(sequence: str, subsequence_size: int) -> str:
+    if subsequence_size == 0:
+        return ""
+    sequence_length = len(sequence)
+    for i in range(9, 0, -1):
+        occurence = find_or_none(sequence, str(i))
+        if occurence is None or sequence_length - occurence < subsequence_size:
+            continue
+        return str(i) + get_largest_subsequence(
+            sequence[occurence + 1 :], subsequence_size - 1
+        )
+    raise ValueError("Not a valid sequence.")
+
+
+def solve_part2(file_path: str) -> int:
+    sum = 0
+    for battery_bank in parse_battery_bank_file(file_path):
+        print("----------------")
+        print(f"{battery_bank=}")
+        joltage = get_largest_subsequence(battery_bank, 12)
+        print(f"{joltage=}")
+        sum += int(joltage)
+    return sum
+
+
+print(solve_part2("input.txt"))
