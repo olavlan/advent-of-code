@@ -1,51 +1,39 @@
 from typing import Iterator, Iterable
-from dataclasses import dataclass
-
-
-@dataclass
-class Interval:
-    start: int
-    stop: int
-
-    def __contains__(self, number: int) -> bool:
-        return self.start <= number <= self.stop
-
-    def __len__(self):
-        return self.stop - self.start + 1
+import bisect
 
 
 class DisjointIntervals:
-    intervals: list[Interval]
-
-    def print(self):
-        for i in self.intervals:
-            print(i.start, i.stop)
+    bounds: list[int]
 
     def __init__(self) -> None:
-        self.intervals = []
+        self.bounds = []
+
+    def __iter__(self) -> Iterator[tuple[int, int]]:
+        for i in range(0, len(self.bounds) // 2 + 1, 2):
+            yield self.bounds[i], self.bounds[i + 1]
 
     def __contains__(self, number: int) -> bool:
-        return any(number in interval for interval in self.intervals)
+        return any(start <= number <= stop for start, stop in self)
 
     def __len__(self):
-        return sum(len(interval) for interval in self.intervals)
+        return sum(stop - start + 1 for start, stop in self)
 
-    def add(self, new: Interval) -> None:
-        i = 0
-        for i, existing in enumerate(self.intervals):
-            if new.stop < existing.start:
-                break
-            if new.start in existing:
-                #go forwards and remove intervals 
-                #existing.stop = max(existing.stop, new.stop)
-                return
-            if new.stop in existing:
-                #go backwards and remove intervals
-                #existing.start = min(existing.start, new.start)
-                return
-        self.intervals.insert(i + 1, new)
-        for i in 
-        return
+    def add(self, start: int, stop: int) -> None:
+        if not self.bounds:
+            self.bounds = [start, stop]
+            return
+
+        new_bounds = [b for b in self.bounds if b < start - 1 or stop + 1 < b]
+        insertion_point = bisect.bisect_left(new_bounds, start)
+        start_is_in_existing_interval = insertion_point % 2 == 1
+        if not start_is_in_existing_interval:
+            new_bounds.insert(insertion_point, start)
+        if len(new_bounds) % 2 == 1:
+            new_bounds.insert(insertion_point + 1, stop)
+        print(start, stop)
+        print(new_bounds)
+        print()
+        self.bounds = new_bounds
 
 
 def parse_numbers(lines: Iterable[str]) -> Iterator[int]:
@@ -65,9 +53,7 @@ def parse_id_file(file_path: str) -> tuple[DisjointIntervals, Iterator[int]]:
             break
         line = line.split("-")
         start, stop = int(line[0]), int(line[1])
-        intervals.add(Interval(start, stop))
-        intervals.print()
-        print()
+        intervals.add(start, stop)
 
     return intervals, parse_numbers(lines[i + 1 :])
 
@@ -82,5 +68,5 @@ def solve_part2(file_path: str) -> int:
     return len(intervals)
 
 
-print(solve_part1("input-test.txt"))
-# print(solve_part2("input-test.txt"))
+# print(solve_part1("input.txt"))
+print(solve_part2("input.txt"))
