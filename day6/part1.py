@@ -61,4 +61,4 @@ def solve_part1(file_path: str):
     return worksheet.solve()
 
 
-print(solve_part1("input.txt"))
+print(solve_part1("input-test.txt"))
