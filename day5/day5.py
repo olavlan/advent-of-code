@@ -24,10 +24,10 @@ class DisjointIntervals:
         new_bounds = [b for b in self.bounds if b < start]
         if len(new_bounds) % 2 == 0:
             new_bounds.append(start)
-        suffix = [b for b in self.bounds if b > stop]
-        if len(suffix) % 2 == 0:
+        trail = [b for b in self.bounds if b > stop]
+        if len(trail) % 2 == 0:
             new_bounds.append(stop)
-        new_bounds += suffix
+        new_bounds += trail
         self.bounds = new_bounds
 
 
