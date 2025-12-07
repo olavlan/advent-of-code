@@ -1,5 +1,4 @@
 from typing import Iterator, Iterable
-import bisect
 
 
 class DisjointIntervals:
@@ -9,7 +8,7 @@ class DisjointIntervals:
         self.bounds = []
 
     def __iter__(self) -> Iterator[tuple[int, int]]:
-        for i in range(0, len(self.bounds) // 2 + 1, 2):
+        for i in range(0, len(self.bounds), 2):
             yield self.bounds[i], self.bounds[i + 1]
 
     def __contains__(self, number: int) -> bool:
@@ -22,17 +21,13 @@ class DisjointIntervals:
         if not self.bounds:
             self.bounds = [start, stop]
             return
-
-        new_bounds = [b for b in self.bounds if b < start - 1 or stop + 1 < b]
-        insertion_point = bisect.bisect_left(new_bounds, start)
-        start_is_in_existing_interval = insertion_point % 2 == 1
-        if not start_is_in_existing_interval:
-            new_bounds.insert(insertion_point, start)
-        if len(new_bounds) % 2 == 1:
-            new_bounds.insert(insertion_point + 1, stop)
-        print(start, stop)
-        print(new_bounds)
-        print()
+        new_bounds = [b for b in self.bounds if b < start]
+        if len(new_bounds) % 2 == 0:
+            new_bounds.append(start)
+        suffix = [b for b in self.bounds if b > stop]
+        if len(suffix) % 2 == 0:
+            new_bounds.append(stop)
+        new_bounds += suffix
         self.bounds = new_bounds
 
 
@@ -68,5 +63,5 @@ def solve_part2(file_path: str) -> int:
     return len(intervals)
 
 
-# print(solve_part1("input.txt"))
+print(solve_part1("input-test.txt"))
 print(solve_part2("input.txt"))
