@@ -58,10 +58,10 @@ class Graph:
 
 
 def solve_part1(file_path: str, iterations: int) -> int:
-    junction_boxes = list(parse_junction_box_file(file_path))
-    n = len(junction_boxes)
-    connections = generate_sorted_edges(junction_boxes)[:iterations]
-    graph = Graph(n, connections)
+    nodes = list(parse_junction_box_file(file_path))
+    n = len(nodes)
+    edges = generate_sorted_edges(nodes)[:iterations]
+    graph = Graph(n, edges)
     circuits = graph.connected_components()
     circuits.sort(key=lambda c: len(c), reverse=True)
     c1, c2, c3 = circuits[:3]
@@ -69,9 +69,9 @@ def solve_part1(file_path: str, iterations: int) -> int:
 
 
 def solve_part2(file_path: str) -> int:
-    junction_boxes = list(parse_junction_box_file(file_path))
-    n = len(junction_boxes)
-    possible_edges = generate_sorted_edges(junction_boxes)
+    nodes = list(parse_junction_box_file(file_path))
+    n = len(nodes)
+    possible_edges = generate_sorted_edges(nodes)
     graph = Graph(n, [])
     edge = possible_edges[0]
     joined = {edge[0], edge[1]}
@@ -87,8 +87,8 @@ def solve_part2(file_path: str) -> int:
         graph.walk(start)
         joined |= graph.current_component
 
-    box1, box2 = junction_boxes[edge[0]], junction_boxes[edge[1]]
-    return box1[0] * box2[0]
+    node1, node2 = nodes[edge[0]], nodes[edge[1]]
+    return node1[0] * node2[0]
 
 
 # print(solve_part1("input-test.txt", 10))
