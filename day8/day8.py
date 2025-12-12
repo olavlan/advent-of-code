@@ -62,9 +62,9 @@ def solve_part1(file_path: str, iterations: int) -> int:
     n = len(nodes)
     edges = generate_sorted_edges(nodes)[:iterations]
     graph = Graph(n, edges)
-    circuits = graph.connected_components()
-    circuits.sort(key=lambda c: len(c), reverse=True)
-    c1, c2, c3 = circuits[:3]
+    connected_components = graph.connected_components()
+    connected_components.sort(key=lambda c: len(c), reverse=True)
+    c1, c2, c3 = connected_components[:3]
     return len(c1) * len(c2) * len(c3)
 
 
